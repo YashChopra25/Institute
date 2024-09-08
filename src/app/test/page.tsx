@@ -54,7 +54,63 @@ const Test = () => {
     setActiveStep(0);
   };
   const GenerateReport = () => {
-    alert("Generate Report");
+    const linguistic_intelligence = JSON.parse(
+      localStorage.getItem("linguistic-intelligence") || "{}"
+    );
+    const logical_mathematical_intelligence = JSON.parse(
+      localStorage.getItem("logical-mathematical-intelligence") || "{}"
+    );
+    const spatial_intelligence = JSON.parse(
+      localStorage.getItem("spatial-intelligence") || "{}"
+    );
+    const bodily_kinesthetic_intelligence = JSON.parse(
+      localStorage.getItem("bodily-kinesthetic-intelligence") || "{}"
+    );
+    const musical_intelligence = JSON.parse(
+      localStorage.getItem("musical-intelligence") || "{}"
+    );
+    const perspective_intelligence = JSON.parse(
+      localStorage.getItem("interpersonal-intelligence") || "{}"
+    );
+    const intrapersonal_intelligence = JSON.parse(
+      localStorage.getItem("intrapersonal-intelligence") || "{}"
+    );
+    const naturalistic_intelligence = JSON.parse(
+      localStorage.getItem("naturalistic-intelligence") || "{}"
+    );
+    const spiritual_intelligence = JSON.parse(
+      localStorage.getItem("spiritual-intelligence") || "{}"
+    );
+    const existential_intelligence = JSON.parse(
+      localStorage.getItem("existential-intelligence") || "{}"
+    );
+
+    const TotalScore =
+      (linguistic_intelligence?.count || 0) +
+      (logical_mathematical_intelligence?.count || 0) +
+      (spatial_intelligence?.count || 0) +
+      (bodily_kinesthetic_intelligence?.count || 0) +
+      (musical_intelligence?.count || 0) +
+      (perspective_intelligence?.count || 0) +
+      (intrapersonal_intelligence?.count || 0) +
+      (naturalistic_intelligence?.count || 0) +
+      (spiritual_intelligence?.count || 0) +
+      (existential_intelligence?.count || 0);
+
+    alert(`Your total score is ${TotalScore}`);
+    console.log(
+      linguistic_intelligence,
+      logical_mathematical_intelligence,
+      spatial_intelligence,
+      bodily_kinesthetic_intelligence,
+      musical_intelligence,
+      perspective_intelligence,
+      intrapersonal_intelligence,
+      naturalistic_intelligence,
+      spiritual_intelligence,
+      existential_intelligence
+    );
+    localStorage.clear();
   };
   return (
     <Box className="w-full py-10 px-8 flex flex-col items-center min-h-screen">

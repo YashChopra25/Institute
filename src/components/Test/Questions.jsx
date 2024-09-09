@@ -4,21 +4,34 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import {  FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 const Questions = ({ descriptive, className }) => {
+    /**
+     * Saves the answer to the local storage
+     * @param {string} usedFor - The key to use for the local storage
+     * @param {string} title - The title of the answer
+     * @param {string} value - The value of the answer
+     * @returns {void}
+     */
     const SavedAnserInLocalSTorage = (usedFor, title, value) => {
+        // Check if the key already exists in the local storage
         const descriptive = JSON.parse(localStorage.getItem(usedFor))
         if (descriptive == null) {
+            // If not, create a new array with the answer
             localStorage.setItem(usedFor, JSON.stringify([{ title, value }]))
         } else {
+            // If the key does exist, check if the answer already exists in the array
             let isExit = false;
-            descriptive.map((item) => {
+            descriptive?.map((item, index) => {
                 if (item.title == title) {
+                    // If the answer already exists, update the value
                     item.value = value
                     isExit = true
                 }
             })
             if (!isExit) {
+                // If the answer does not exist, add it to the array
                 descriptive.push({ title, value })
             }
+            // Save the array back to the local storage
             localStorage.setItem(usedFor, JSON.stringify(descriptive))
         }
 

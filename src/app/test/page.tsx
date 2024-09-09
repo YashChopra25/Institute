@@ -153,8 +153,8 @@ const Test = () => {
     localStorage.clear();
   };
   return (
-    <Box className="min-h-screen flex items-center justify-center mt-10">
-      <Box className="w-full py-10 px-8 flex flex-col justify-center items-center min-h-screen mt-10 max-w-screen-xl min-w-[1280px]">
+    <Box className="min-h-screen max-w-screen-xl min-w-[1200px] flex items-center justify-center mt-10">
+      <Box className="w-full py-10 px-8 flex flex-col justify-center items-center min-h-screen mt-10 max-w-screen-xl min-w-[1200px]">
         <Stepper activeStep={activeStep} className="w-full">
           {questions?.map((label, index) => {
             const stepProps: { completed?: boolean } = {};
@@ -173,7 +173,7 @@ const Test = () => {
           })}
         </Stepper>
         {activeStep === questions.length ? (
-          <div className="min-h-full mt-10">
+          <div className="min-h-[70vh]">
             <Typography sx={{ mt: 2, mb: 1 }}>
               All attempts all the questions - you&apos;re finished
             </Typography>

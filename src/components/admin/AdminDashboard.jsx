@@ -18,18 +18,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Pencil, Trash2 } from "lucide-react";
-import {
-  SAMPLE_QUESTIONS,
-  COLUMN_NAMES,
-  CATEGORIES,
-} from "../../lib/constants";
+import { COLUMN_NAMES, CATEGORIES } from "../../lib/constants";
 import { addQuestion } from "../../actions/add-question";
 import { getAllQuestions } from "../../actions/get-question";
 import { toast } from "sonner";
 import ClipLoader from "react-spinners/ClipLoader";
 
 export default function AdminDashboard() {
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState();
   const [loading, setLoading] = useState(false);
   const [newQuestion, setNewQuestion] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -38,6 +34,15 @@ export default function AdminDashboard() {
     category: "",
   });
 
+  const getQuestions = async () => {
+    const questions = await getAllQuestions();
+    console.log("questions are ", questions);
+    if (questions) {
+      setQuestions(questions);
+    }
+  };
+
+  getQuestions();
   // Validate inputs before adding a question
   const validateForm = () => {
     let hasError = false;
@@ -81,21 +86,6 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
-
-  // Fetch questions from API
-  const fetchQuestions = async () => {
-    try {
-      const data = await getAllQuestions();
-      setQuestions(data || []);
-    } catch (error) {
-      console.log("Error fetching questions: ", error);
-    }
-  };
-
-  // Fetch questions when component mounts
-  useEffect(() => {
-    fetchQuestions();
-  }); // Empty dependency array ensures this runs only once on mount
 
   return (
     <section className="w-full min-h-screen px-5 mt-20 md:px-10">
@@ -159,22 +149,23 @@ export default function AdminDashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {questions.map((question) => (
-                <TableRow key={question.id}>
-                  <TableCell className="font-medium text-gray-700">
-                    {question.question}
-                  </TableCell>
-                  <TableCell className="font-medium text-gray-700">
-                    {question.category}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Pencil className="w-4 h-4 text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-800" />
-                  </TableCell>
-                  <TableCell>
-                    <Trash2 className="w-4 h-4 text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-800" />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {questions &&
+                questions.map((question) => (
+                  <TableRow key={question.id}>
+                    <TableCell className="font-medium text-gray-700">
+                      {question.question}
+                    </TableCell>
+                    <TableCell className="font-medium text-gray-700">
+                      {question.category}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Pencil className="w-4 h-4 text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-800" />
+                    </TableCell>
+                    <TableCell>
+                      <Trash2 className="w-4 h-4 text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-800" />
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </div>

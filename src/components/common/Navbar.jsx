@@ -4,6 +4,7 @@ import Login from "./Login";
 import Register from "./Register";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import UserAvatar from "./UserAvatar";
+import Link from "next/link";
 
 export default function Navbar() {
   const user = useCurrentUser();
@@ -13,7 +14,17 @@ export default function Navbar() {
         <p className="text-3xl font-bold">Logo</p>
         <div className="flex items-center gap-4">
           {user?.image ? (
-            <UserAvatar />
+            <>
+              {user.role === "ADMIN" && (
+                <Link
+                  href={"/admin"}
+                  className="text-blue font-medium border-2 border-blue rounded-full px-5 py-2 mr-3 text-sm"
+                >
+                  Dashboard
+                </Link>
+              )}
+              <UserAvatar />
+            </>
           ) : (
             <>
               <Register />

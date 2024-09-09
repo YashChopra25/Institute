@@ -153,69 +153,71 @@ const Test = () => {
     localStorage.clear();
   };
   return (
-    <Box className="w-full py-10 px-8 flex flex-col justify-center items-center min-h-screen mt-10 max-w-screen-xl min-w-[1280px]">
-      <Stepper activeStep={activeStep} className="w-full">
-        {questions?.map((label, index) => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: {
-            optional?: React.ReactNode;
-          } = {};
+    <Box className="min-h-screen flex items-center justify-center mt-10">
+      <Box className="w-full py-10 px-8 flex flex-col justify-center items-center min-h-screen mt-10 max-w-screen-xl min-w-[1280px]">
+        <Stepper activeStep={activeStep} className="w-full">
+          {questions?.map((label, index) => {
+            const stepProps: { completed?: boolean } = {};
+            const labelProps: {
+              optional?: React.ReactNode;
+            } = {};
 
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step key={label.name} {...stepProps}>
-              <StepLabel {...labelProps}>{label.name}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {activeStep === questions.length ? (
-        <div className="min-h-full mt-10">
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All attempts all the questions - you&apos;re finished
-          </Typography>
-          <Button
-            color="inherit"
-            sx={{ mr: 1 }}
-            variant="contained"
-            onClick={GenerateReport}
-          >
-            Click here to generate Report
-          </Button>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </div>
-      ) : (
-        <React.Fragment>
-          <Questions
-            descriptive={questions[activeStep]}
-            className="mt-2 mb-1"
-          />
-          <Box className="w-1/2 flex pt-3">
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+            return (
+              <Step key={label.name} {...stepProps}>
+                <StepLabel {...labelProps}>{label.name}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+        {activeStep === questions.length ? (
+          <div className="min-h-full mt-10">
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              All attempts all the questions - you&apos;re finished
+            </Typography>
             <Button
               color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
               sx={{ mr: 1 }}
+              variant="contained"
+              onClick={GenerateReport}
             >
-              Back
+              Click here to generate Report
             </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button onClick={handleReset}>Reset</Button>
+            </Box>
+          </div>
+        ) : (
+          <React.Fragment>
+            <Questions
+              descriptive={questions[activeStep]}
+              className="mt-2 mb-1"
+            />
+            <Box className="w-1/2 flex pt-3">
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                Back
               </Button>
-            )}
-            <Button onClick={handleNext}>
-              {activeStep === questions.length - 1 ? "Finish" : "Next"}
-            </Button>
-          </Box>
-        </React.Fragment>
-      )}
+              <Box sx={{ flex: "1 1 auto" }} />
+              {isStepOptional(activeStep) && (
+                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                  Skip
+                </Button>
+              )}
+              <Button onClick={handleNext}>
+                {activeStep === questions.length - 1 ? "Finish" : "Next"}
+              </Button>
+            </Box>
+          </React.Fragment>
+        )}
+      </Box>
     </Box>
   );
 };

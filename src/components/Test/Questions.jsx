@@ -27,35 +27,35 @@ const Questions = ({ descriptive, className }) => {
         <div className={"w-11/12 h-full " + className}>
             <Card className='w-full min-h-full'>
                 <CardContent>
-                    <Typography gutterBottom variant="h4" component="div" className='max-md:text-xl max-md:font-bold'>
+                    <Typography gutterBottom variant="h4" component="div">
                         {descriptive?.name}
                     </Typography>
-                    <Typography marginLeft={"auto"} display={"flex"} justifyContent={"space-between"} gap={1} variant="div" color="text.secondary" sx={{ textAlign: "center" }} width={"50%"} paddingLeft={"100px"} className='max-md:hidden'>
+                    <Typography marginLeft={"auto"} display={"flex"} justifyContent={"space-between"} gap={1} variant="div" color="text.secondary" sx={{ textAlign: "center" }} width={"50%"} paddingLeft={"100px"}>
                         <Typography variant='span' className='capitalize'>one</Typography>
                         <Typography variant='span' className='capitalize'>two</Typography>
                         <Typography variant='span' className='capitalize'>three</Typography>
                         <Typography variant='span' className='capitalize'>four</Typography>
-                        <Typography variant='span' className='capitalize'>five</Typography>
+                        <Typography variant='span' className='capitalize pr-7'>five</Typography>
                     </Typography>
 
                     {
                         descriptive?.questions?.map((question, index) => (
                             <React.Fragment key={question?.title}>
-                                <Typography gutterBottom variant="h6" component="div" className='max-md:text-lg max-md:font-medium'>
+                                <Typography gutterBottom variant="h6" component="div">
                                     {index + 1}. {question?.title}
                                 </Typography>
                                 <FormControl className='mb-3 w-full'>
-                                    <ol type='A' className='list-disc pl-10 w-full max-md:p-3'>
+                                    <ol type='A' className='list-disc pl-10 w-full'>
                                         {
                                             question?.options?.map((option) => (
-                                                <li key={option?.text} className='flex items-center justify-between w-full max-md:flex-col max-md:justify-start max-md:items-start'>
+                                                <li key={option?.text} className='flex items-center justify-between w-full '>
                                                     <Typography gutterBottom component="div" variant='li' >
                                                         {option?.text}
                                                     </Typography>
                                                     <RadioGroup
                                                         aria-labelledby="demo-radio-buttons-group-label"
                                                         name={option?.text}
-                                                        className='flex flex-row gap-12 max-md:gap-1'
+                                                        className='flex flex-row gap-12'
 
                                                     >
                                                         {

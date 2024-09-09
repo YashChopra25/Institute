@@ -208,8 +208,7 @@ const Test = () => {
             )}
       </Box>
         </Box>
-      </div>
-    </div>
+    
   );
 };
 

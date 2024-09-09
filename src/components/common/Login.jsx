@@ -9,6 +9,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import { signIn } from "next-auth/react";
+
 import { Button } from "@/components/ui/button";
 
 import ClipLoader from "react-spinners/ClipLoader";
@@ -22,7 +24,7 @@ export default function Login() {
     startTransition(() => {
       setShowLoader(true);
       signIn("google", {
-        callbackUrl: "/stores",
+        callbackUrl: "/",
       }).finally(() => {
         setShowLoader(false);
       });

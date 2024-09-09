@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
+import { signIn } from "next-auth/react";
+
 import ClipLoader from "react-spinners/ClipLoader";
 import { MoveRight } from "lucide-react";
 import Link from "next/link";
@@ -21,7 +23,7 @@ export default function Register() {
     startTransition(() => {
       setShowLoader(true);
       signIn("google", {
-        callbackUrl: "/stores",
+        callbackUrl: "/",
       }).finally(() => {
         setShowLoader(false);
       });

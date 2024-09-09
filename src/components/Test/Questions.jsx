@@ -35,7 +35,7 @@ const Questions = ({ descriptive, className }) => {
                         <Typography variant='span' className='capitalize'>two</Typography>
                         <Typography variant='span' className='capitalize'>three</Typography>
                         <Typography variant='span' className='capitalize'>four</Typography>
-                        <Typography variant='span' className='capitalize'>five</Typography>
+                        <Typography variant='span' className='capitalize pr-7'>five</Typography>
                     </Typography>
 
                     {

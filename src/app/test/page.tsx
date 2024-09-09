@@ -153,7 +153,7 @@ const Test = () => {
     localStorage.clear();
   };
   return (
-    <Box className="w-full py-10 px-8 flex flex-col items-center min-h-screen max-md:mt-10">
+    <Box className="w-full py-10 px-8 flex flex-col justify-center items-center min-h-screen mt-10 max-w-screen-xl min-w-[1280px]">
       <Stepper activeStep={activeStep} className="w-full">
         {questions?.map((label, index) => {
           const stepProps: { completed?: boolean } = {};

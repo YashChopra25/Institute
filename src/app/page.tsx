@@ -30,7 +30,7 @@ export default function Home() {
             <p>5 = Statement describes you very well</p>
           </div>
         </div>
-        <Link href={"/assessment"}>
+        <Link href={"/test"}>
           <button className="flex items-center justify-center px-5 py-2 mt-10 text-base font-medium text-white bg-white border-2 rounded-full border-blue w-fit ">
             <span className="text-blue">Start Assessment</span>
           </button>

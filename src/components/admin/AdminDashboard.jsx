@@ -19,13 +19,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Pencil, Trash2 } from "lucide-react";
 import { COLUMN_NAMES, CATEGORIES } from "../../lib/constants";
-import { addQuestion } from "../../actions/add-question";
-import { getAllQuestions } from "../../actions/get-question";
+import { addQuestion } from "../../actions/add-question.js"; // Assume you have these actions
 import { toast } from "sonner";
 import ClipLoader from "react-spinners/ClipLoader";
+import axios from "axios";
 
 export default function AdminDashboard() {
-  const [questions, setQuestions] = useState();
   const [loading, setLoading] = useState(false);
   const [newQuestion, setNewQuestion] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -33,17 +32,11 @@ export default function AdminDashboard() {
     question: "",
     category: "",
   });
+  const [questions, setQuestions] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [editedQuestion, setEditedQuestion] = useState("");
 
-  const getQuestions = async () => {
-    const questions = await getAllQuestions();
-    console.log("questions are ", questions);
-    if (questions) {
-      setQuestions(questions);
-    }
-  };
-
-  getQuestions();
-  // Validate inputs before adding a question
   const validateForm = () => {
     let hasError = false;
     const newErrors = { question: "", category: "" };
@@ -63,29 +56,103 @@ export default function AdminDashboard() {
 
   // Handle form submission
   const handleAddQuestion = async () => {
-    setLoading(true);
-    if (validateForm()) {
-      const formData = new FormData();
-      formData.append("question", newQuestion);
-      formData.append("category", selectedCategory);
-      const res = await addQuestion(formData);
+    try {
+      setLoading(true);
+      if (validateForm()) {
+        const formData = new FormData();
+        formData.append("question", newQuestion);
+        formData.append("category", selectedCategory);
+        const res = await addQuestion(formData);
+        if (res) {
+          toast.success("Question added successfully");
+          setNewQuestion("");
+          setSelectedCategory("");
+          fetchQuestions(); // Refresh the list of questions
+          setLoading(false);
+          return;
+        }
+
+        setErrors({ question: "", category: "" });
+
+        toast.error("Failed to add question");
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditQuestion = async () => {
+    try {
+      setLoading(true);
+      if (editedQuestion.trim()) {
+        const res = await updateQuestion(currentQuestion._id, {
+          question: editedQuestion,
+        });
+        if (res) {
+          toast.success("Question updated successfully");
+          setEditMode(false);
+          setEditedQuestion("");
+          fetchQuestions(); // Refresh the list of questions
+          setLoading(false);
+          return;
+        }
+
+        toast.error("Failed to update question");
+        setLoading(false);
+      } else {
+        toast.error("Question text is required");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteQuestion = async (id) => {
+    try {
+      setLoading(true);
+      const res = await deleteQuestion(id);
       if (res) {
-        toast.success("Question added successfully");
-        setNewQuestion("");
-        setSelectedCategory("");
-        fetchQuestions(); // Re-fetch questions after adding a new one
+        toast.success("Question deleted successfully");
+        fetchQuestions(); // Refresh the list of questions
         setLoading(false);
         return;
       }
 
-      setErrors({ question: "", category: "" });
-
-      toast.error("Failed to add question");
+      toast.error("Failed to delete question");
       setLoading(false);
-    } else {
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
     }
   };
+
+  const fetchQuestions = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/questions");
+      const fetchedQuestions = res.data.flatMap((category) =>
+        category.questions.map((q) => ({
+          ...q,
+          category: category.category,
+        }))
+      );
+      setQuestions(fetchedQuestions); // Update state with flattened questions
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuestions();
+  }, []);
 
   return (
     <section className="w-full min-h-screen px-5 mt-20 md:px-10">
@@ -132,12 +199,30 @@ export default function AdminDashboard() {
           </div>
 
           <Button
-            onClick={handleAddQuestion}
+            onClick={editMode ? handleEditQuestion : handleAddQuestion}
             className="bg-transparent border-2 rounded-full border-blue text-blue hover:bg-transparent"
           >
-            {loading ? <ClipLoader color="blue" size={20} /> : "Add Question"}
+            {loading ? (
+              <ClipLoader color="blue" size={20} />
+            ) : editMode ? (
+              "Save Changes"
+            ) : (
+              "Add Question"
+            )}
           </Button>
         </div>
+
+        {editMode && (
+          <div className="mt-4">
+            <Input
+              type="text"
+              placeholder="Edit question"
+              value={editedQuestion}
+              onChange={(e) => setEditedQuestion(e.target.value)}
+              className={`w-full ${errors.question ? "border-red-500" : ""}`}
+            />
+          </div>
+        )}
 
         <div className="flex flex-col w-full mt-6">
           <Table>
@@ -149,23 +234,32 @@ export default function AdminDashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {questions &&
-                questions.map((question) => (
-                  <TableRow key={question.id}>
-                    <TableCell className="font-medium text-gray-700">
-                      {question.question}
-                    </TableCell>
-                    <TableCell className="font-medium text-gray-700">
-                      {question.category}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Pencil className="w-4 h-4 text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-800" />
-                    </TableCell>
-                    <TableCell>
-                      <Trash2 className="w-4 h-4 text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-800" />
-                    </TableCell>
-                  </TableRow>
-                ))}
+              {questions.map((question) => (
+                <TableRow key={question._id}>
+                  <TableCell className="font-medium text-gray-700">
+                    {question.question}
+                  </TableCell>
+                  <TableCell className="font-medium text-gray-700">
+                    {question.category}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Pencil
+                      className="w-4 h-4 text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-800"
+                      onClick={() => {
+                        setEditMode(true);
+                        setCurrentQuestion(question);
+                        setEditedQuestion(question.question);
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Trash2
+                      className="w-4 h-4 text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-800"
+                      onClick={() => handleDeleteQuestion(question._id)}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>

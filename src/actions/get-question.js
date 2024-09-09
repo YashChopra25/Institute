@@ -6,7 +6,7 @@ import { Question } from "../lib/question.model";
 export const getAllQuestions = async () => {
   try {
     await connectToDB();
-    const questions = await Question.find({});
+    const questions = await Question.find();
     console.log("questions are ", questions);
     if (questions) {
       return questions;
@@ -14,6 +14,7 @@ export const getAllQuestions = async () => {
       return null;
     }
   } catch (error) {
+    console.error("Error getting questions: ", error);
     return null;
   }
 };

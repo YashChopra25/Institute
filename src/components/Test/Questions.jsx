@@ -2,7 +2,7 @@ import React from 'react'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Checkbox, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import {  FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 const Questions = ({ descriptive, className }) => {
     const SavedAnserInLocalSTorage = (usedFor, title, value) => {
         const descriptive = JSON.parse(localStorage.getItem(usedFor))
@@ -10,7 +10,7 @@ const Questions = ({ descriptive, className }) => {
             localStorage.setItem(usedFor, JSON.stringify([{ title, value }]))
         } else {
             let isExit = false;
-            descriptive.map((item, index) => {
+            descriptive.map((item) => {
                 if (item.title == title) {
                     item.value = value
                     isExit = true
@@ -24,7 +24,7 @@ const Questions = ({ descriptive, className }) => {
 
     }
     return (
-        <div className={"w-11/12 h-full " + className}>
+        <div className={"w-11/12 h-full" + className}>
             <Card className='w-full min-h-full'>
                 <CardContent>
                     <Typography gutterBottom variant="h4" component="div">

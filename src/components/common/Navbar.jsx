@@ -1,4 +1,6 @@
 import React from "react";
+import Login from "./Login";
+import Register from "./Register";
 
 export default function Navbar() {
   return (
@@ -6,12 +8,8 @@ export default function Navbar() {
       <div className="flex items-center justify-between w-full max-w-screen-lg mx-auto">
         <p className="text-3xl font-bold">Logo</p>
         <div className="flex items-center gap-4">
-          <button className="flex items-center justify-center px-5 py-2 font-medium text-white bg-blue rounded-3xl">
-            Register
-          </button>
-          <button className="flex items-center justify-center px-5 py-2 font-medium text-white bg-blue rounded-3xl">
-            Login
-          </button>
+          <Register />
+          <Login />
         </div>
       </div>
     </nav>

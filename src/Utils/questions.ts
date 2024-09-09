@@ -1,4 +1,4 @@
-export const questions = [
+export  const questions = [
     {
       name: "Cognitive and Analytical Intelligences",
       questions: [

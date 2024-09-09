@@ -2,51 +2,78 @@ import React from 'react'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Checkbox, FormControl, FormControlLabel } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 const Questions = ({ descriptive, className }) => {
-    const SavedAnserInLocalSTorage = (title, value) => {
-        console.log(title, value)
-        const descriptive = JSON.parse(localStorage.getItem(title))
+    const SavedAnserInLocalSTorage = (usedFor, title, value) => {
+        const descriptive = JSON.parse(localStorage.getItem(usedFor))
         if (descriptive == null) {
-            localStorage.setItem(title, JSON.stringify({ count: 1 }))
+            localStorage.setItem(usedFor, JSON.stringify([{ title, value }]))
         } else {
-            if (value) {
-                const prevValue = descriptive?.count + 1
-                localStorage.setItem(title, JSON.stringify({ count: prevValue }))
+            let isExit = false;
+            descriptive.map((item, index) => {
+                if (item.title == title) {
+                    item.value = value
+                    isExit = true
+                }
+            })
+            if (!isExit) {
+                descriptive.push({ title, value })
             }
-            else {
-                const prevValue = (descriptive?.count) ? descriptive?.count - 1 : 0
-                localStorage.setItem(title, JSON.stringify({ count: prevValue }))
-            }
+            localStorage.setItem(usedFor, JSON.stringify(descriptive))
         }
 
     }
     return (
-        <div className={"w-3/4 h-full " + className}>
+        <div className={"w-11/12 h-full " + className}>
             <Card className='w-full min-h-full'>
                 <CardContent>
-                    <Typography gutterBottom variant="h4" component="div">
+                    <Typography gutterBottom variant="h4" component="div" className='max-md:text-xl max-md:font-bold'>
                         {descriptive?.name}
                     </Typography>
+                    <Typography marginLeft={"auto"} display={"flex"} justifyContent={"space-between"} gap={1} variant="div" color="text.secondary" sx={{ textAlign: "center" }} width={"50%"} paddingLeft={"100px"} className='max-md:hidden'>
+                        <Typography variant='span' className='capitalize'>one</Typography>
+                        <Typography variant='span' className='capitalize'>two</Typography>
+                        <Typography variant='span' className='capitalize'>three</Typography>
+                        <Typography variant='span' className='capitalize'>four</Typography>
+                        <Typography variant='span' className='capitalize'>five</Typography>
+                    </Typography>
+
                     {
                         descriptive?.questions?.map((question, index) => (
                             <React.Fragment key={question?.title}>
-                                <Typography gutterBottom variant="h6" component="div">
+                                <Typography gutterBottom variant="h6" component="div" className='max-md:text-lg max-md:font-medium'>
                                     {index + 1}. {question?.title}
                                 </Typography>
-                                <FormControl className='mb-3'>
-                                    {
-                                        question?.options?.map((option) => (
-                                            <FormControlLabel
-                                                key={option?.id}
-                                                value={question?.title?.split(" ")?.join("-")}
-                                                control={<Checkbox />}
-                                                label={option?.text}
-                                                labelPlacement="end"
-                                                onChange={(e) => SavedAnserInLocalSTorage(e?.target?.value.toLowerCase(), e.target.checked)}
-                                            />
-                                        ))
-                                    }
+                                <FormControl className='mb-3 w-full'>
+                                    <ol type='A' className='list-disc pl-10 w-full max-md:p-3'>
+                                        {
+                                            question?.options?.map((option) => (
+                                                <li key={option?.text} className='flex items-center justify-between w-full max-md:flex-col max-md:justify-start max-md:items-start'>
+                                                    <Typography gutterBottom component="div" variant='li' >
+                                                        {option?.text}
+                                                    </Typography>
+                                                    <RadioGroup
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        name={option?.text}
+                                                        className='flex flex-row gap-12 max-md:gap-1'
+
+                                                    >
+                                                        {
+                                                            Array.from({ length: 5 }).map((_, index) => (
+                                                                <FormControlLabel
+                                                                    key={option?.text + index}
+                                                                    control={<Radio />}
+                                                                    value={index + 1}
+                                                                    name={option?.text}
+                                                                    onClick={(e) => SavedAnserInLocalSTorage(question?.title?.split(" ")?.join("-").toLowerCase(), e.target.name, e.target.value)}
+                                                                />
+                                                            ))
+                                                        }
+                                                    </RadioGroup>
+                                                </li>
+                                            ))
+                                        }
+                                    </ol>
                                 </FormControl>
                             </React.Fragment>
                         ))

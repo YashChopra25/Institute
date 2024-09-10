@@ -6,7 +6,7 @@ import { Question } from "../lib/question.model";
 export const addQuestion = async (formData) => {
   try {
     await connectToDB();
-    console.log("formData is ", formData);
+    
 
     const newCategory = formData.get("category");
     const newQuestion = formData.get("question");

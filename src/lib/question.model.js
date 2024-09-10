@@ -1,15 +1,12 @@
 import mongoose from "mongoose";
 
-const questionSubSchema = new mongoose.Schema(
-  {
-    question: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+const questionSubSchema = new mongoose.Schema({
+  question: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  { _id: false }
-);
+});
 
 const questionSchema = new mongoose.Schema(
   {

@@ -7,7 +7,6 @@ export const getAllQuestions = async () => {
   try {
     await connectToDB();
     const questions = await Question.find();
-    console.log("questions are ", questions);
     if (questions) {
       return questions;
     } else {

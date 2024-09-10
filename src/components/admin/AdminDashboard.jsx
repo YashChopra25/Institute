@@ -23,6 +23,8 @@ import { addQuestion } from "../../actions/add-question.js"; // Assume you have 
 import { toast } from "sonner";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "axios";
+import { updateQuestion } from "../../actions/update-question";
+import { deleteQuestion } from "../../actions/delete-question";
 
 export default function AdminDashboard() {
   const [loading, setLoading] = useState(false);
@@ -90,9 +92,11 @@ export default function AdminDashboard() {
     try {
       setLoading(true);
       if (editedQuestion.trim()) {
-        const res = await updateQuestion(currentQuestion._id, {
-          question: editedQuestion,
-        });
+        const formData = new FormData();
+        formData.append("category", currentQuestion.category);
+        formData.append("oldQuestion", currentQuestion.question);
+        formData.append("newQuestion", editedQuestion);
+        const res = await updateQuestion(formData);
         if (res) {
           toast.success("Question updated successfully");
           setEditMode(false);
@@ -115,10 +119,14 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDeleteQuestion = async (id) => {
+  const handleDeleteQuestion = async (obj) => {
     try {
+      
       setLoading(true);
-      const res = await deleteQuestion(id);
+      const formData = new FormData();
+      formData.append("category", obj.category);
+      formData.append("question", obj.question);
+      const res = await deleteQuestion(formData);
       if (res) {
         toast.success("Question deleted successfully");
         fetchQuestions(); // Refresh the list of questions
@@ -255,7 +263,12 @@ export default function AdminDashboard() {
                   <TableCell>
                     <Trash2
                       className="w-4 h-4 text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-800"
-                      onClick={() => handleDeleteQuestion(question._id)}
+                      onClick={() =>
+                        handleDeleteQuestion({
+                          category: question.category,
+                          question: question.question,
+                        })
+                      }
                     />
                   </TableCell>
                 </TableRow>
